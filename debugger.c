@@ -17,7 +17,7 @@ main (int argc, char **argv)
   };
 
   opterr = 0;
-  while ((c = getopt_long (argc, argv, "hn:l:", long_options, NULL)) != -1)
+  while ((c = getopt_long_only (argc, argv, "hn:l:", long_options, NULL)) != -1)
     switch (c)
       {
       case 'h':
