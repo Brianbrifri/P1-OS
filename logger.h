@@ -1,3 +1,5 @@
+#ifndef LOGGER_h
+#define LOGGER_H
 #include <time.h>
 
 typedef struct data_struct {
@@ -5,7 +7,10 @@ typedef struct data_struct {
   char *string;
 } data_t;
 
-int addmsg(data_t data);
-void clearlog(void);
-char *getlog(void);
-int savelog(char *filename);
+int addMsg(data_t data);
+void clearLog(void);
+char *getLog(void);
+int saveLog(char *filename);
+void printHelpMessage(void);
+
+#endif
