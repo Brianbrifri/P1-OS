@@ -28,6 +28,7 @@ int main (int argc, char **argv)
 
   opterr = 0;
   while ((c = getopt_long (argc, argv, short_options, long_options, NULL)) != -1)
+    printf("Top of while loop\n");
     switch (c)
       {
       case 'h':
@@ -47,11 +48,6 @@ int main (int argc, char **argv)
           fprintf (stderr, "Option -%c requires an argument.\n", optopt);
         else if (isprint (optopt)) {
           fprintf (stderr, "Unknown option -%c.\n", optopt);
-          data_t newData;
-          newData.string = "Unknown option -a\n";
-          if(addMsg(newData) == 0) {
-            printf("success\n");
-          }
         }
         else
           fprintf (stderr,
@@ -68,6 +64,9 @@ int main (int argc, char **argv)
   if(hflag) {
     printHelpMessage();
   }
+  data_t newData;
+  newData.string = "Unknown option -a\n";
+  char * statusMessage = addMsg(newData);
   saveLog(fileName);
   clearLog();
   return 0;

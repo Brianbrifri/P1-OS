@@ -49,10 +49,9 @@ void clearLog(void) {
     return;
   }
   while(nodeptr) {
-    free(nodeptr->item.string);
+    next = nodeptr->next;
     free(nodeptr);
     nodeptr = next;
-    next = nodeptr->next;
   }
 
 }
@@ -70,7 +69,7 @@ char *getLog(void) {
   }
 
   while(nodeptr) {
-    nodeSize += (sizeof(nodeptr) + sizeof(nodeptr->item.string) + 4);
+    nodeSize += (sizeof(log_t) + strlen(nodeptr->item.string) + 100);
     nodeptr = nodeptr->next;
   }
 
@@ -79,7 +78,7 @@ char *getLog(void) {
     perror("Error: ");
     return "Unable to allocate memory for string\n";
   }
-  logString = "*****Begin Log*****\n";
+  strcat(logString, "Begin Log\n");
   nodeptr = headptr;
   while(nodeptr) {
     //strcat(logString, asctime(localtime(nodeptr->item.time)));
