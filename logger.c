@@ -12,19 +12,22 @@ typedef struct list_struct {
 static log_t *headptr = NULL;
 static log_t *tailptr = NULL;
 
-int addMsg(data_t data) {
+char * addMsg(data_t data) {
   log_t *newEntry;
   int entrySize;
 
   entrySize = sizeof(log_t) + strlen(data.string) + 1;
   //Couldn't add newEntry
   if((newEntry = (log_t *) (malloc(entrySize))) == NULL) {
-    return -1;
+    perror("Error:");
+    return "Could not malloc for log\n";
   }
+
   newEntry->item.time = data.time;
   newEntry->item.string = (char *)newEntry + sizeof(log_t);
   strcpy(newEntry->item.string, data.string);
   newEntry->next = NULL;
+
   if(headptr == NULL) {
     headptr = newEntry;
   }
@@ -32,24 +35,75 @@ int addMsg(data_t data) {
     tailptr->next = newEntry;
   }
   tailptr = newEntry;
-  return 0;
+
+  return "Successfully added data to log\n";
 }
 
 void clearLog(void) {
+  log_t *nodeptr;
+  log_t *next;
+
+  nodeptr = headptr;
+  next = headptr->next;
+  if(!nodeptr) {
+    return;
+  }
+  while(nodeptr) {
+    free(nodeptr->item.string);
+    free(nodeptr);
+    nodeptr = next;
+    next = nodeptr->next;
+  }
 
 }
 
 char *getLog(void) {
-  return NULL;
+  log_t *nodeptr;
+  size_t nodeSize;
+  char *logString;
+
+  nodeSize = 20;
+  nodeptr = headptr;
+
+  if(!nodeptr) {
+    return "No errors t'day, mate!\n";
+  }
+
+  while(nodeptr) {
+    nodeSize += (sizeof(nodeptr) + sizeof(nodeptr->item.string) + 4);
+    nodeptr = nodeptr->next;
+  }
+
+  logString = malloc(nodeSize);
+  if(!logString) {
+    perror("Error: ");
+    return "Unable to allocate memory for string\n";
+  }
+  logString = "*****Begin Log*****\n";
+  nodeptr = headptr;
+  while(nodeptr) {
+    //strcat(logString, asctime(localtime(nodeptr->item.time)));
+    strcat(logString, nodeptr->item.string);
+    strcat(logString, "\n");
+    nodeptr = nodeptr->next;
+  }
+  return logString;
 }
 
-int saveLog(char *filename) {
-  FILE * file = fopen(filename, "wb");
-  if(file != NULL) {
-    fwrite(headptr, sizeof(struct list_struct), 1, file);
-    fclose(file);
+char * saveLog(char *filename) {
+  char *logString;
+  logString = getLog();
+  FILE *file = fopen(fileName, "a");
+  if(!file) {
+    perror("Error:");
+    return("Could not open file\n");
   }
-  return 0;
+  else {
+    fprintf(file, logString);
+    fclose(file); 
+  }
+  free(logString);
+  return "Successfully saved log\n";
 }
 
 void printHelpMessage(void) {
