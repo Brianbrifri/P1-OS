@@ -2,8 +2,6 @@
 #define LOGGER_H
 #include <time.h>
 
-extern char *fileName;
-extern char *programName;
 typedef struct data_struct {
   time_t time;
   char *string;

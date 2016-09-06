@@ -19,7 +19,7 @@ char * addMsg(data_t data) {
   entrySize = sizeof(log_t) + strlen(data.string) + 1;
   //Couldn't add newEntry
   if((newEntry = (log_t *) (malloc(entrySize))) == NULL) {
-    perror("Error:");
+    perror("Error: malloc newEntry ");
     return "Could not malloc for log\n";
   }
 
@@ -45,6 +45,7 @@ void clearLog(void) {
 
   nodeptr = headptr;
   next = headptr->next;
+
   if(!nodeptr) {
     return;
   }
@@ -53,6 +54,9 @@ void clearLog(void) {
     free(nodeptr);
     nodeptr = next;
   }
+
+  headptr = NULL;
+  tailptr = NULL;
 
 }
 
@@ -69,16 +73,16 @@ char *getLog(void) {
   }
 
   while(nodeptr) {
-    nodeSize += (sizeof(log_t) + strlen(nodeptr->item.string) + 100);
+    nodeSize += (sizeof(log_t) + strlen(nodeptr->item.string) + 4);
     nodeptr = nodeptr->next;
   }
 
   logString = malloc(nodeSize);
   if(!logString) {
-    perror("Error: ");
+    perror("Error: logString malloc ");
     return "Unable to allocate memory for string\n";
   }
-  strcat(logString, "Begin Log\n");
+  strcat(logString, "*****Begin Log*****\n");
   nodeptr = headptr;
   while(nodeptr) {
     //strcat(logString, asctime(localtime(nodeptr->item.time)));
@@ -92,9 +96,9 @@ char *getLog(void) {
 char * saveLog(char *filename) {
   char *logString;
   logString = getLog();
-  FILE *file = fopen(fileName, "a");
+  FILE *file = fopen(filename, "a");
   if(!file) {
-    perror("Error:");
+    perror("Error: open file ");
     return("Could not open file\n");
   }
   else {
