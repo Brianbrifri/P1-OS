@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <time.h>
 
 #include "logger.h"
 
@@ -121,10 +122,11 @@ void printHelpMessage(void) {
 
 void buildAndAddErrorMessage(char *errorMessage, char *programName, int nValue) {
   data_t newEntry;
-  newEntry.time = time(NULL);
-  char timeInMillis[sizeof((uintmax_t)newEntry.time)];
-  sprintf(timeInMillis, "%ju", ((uintmax_t)newEntry.time));
-  puts(timeInMillis);
+  clock_gettime(CLOCK_REALTIME, &newEntry.time);
+  long unsigned timeInMillisNum = newEntry.time.tv_nsec;
+  long unsigned timeInSecsNum = newEntry.time.tv_sec;
+  char timeInMillis[sizeof(timeInMillisNum)];
+  sprintf(timeInMillis, "%lu%lu", timeInSecsNum, timeInMillisNum);
   newEntry.string = malloc(sizeof(timeInMillis) + sizeof(errorMessage) + sizeof(programName) + 50);
   strcat(newEntry.string, programName);
   strcat(newEntry.string, ": ");

@@ -39,37 +39,54 @@ int main (int argc, char **argv)
         break;
       case '?':
         if (optopt == 'n') {
-          fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+          char message[50];
+          fprintf(stderr, "Option -%c requires an argument.\n", optopt);
+          sprintf(message, "Option -%c requires an argument. Using default.", optopt);
+          buildAndAddErrorMessage(message, programName, nValue);
+          nValue = 42;
         }
         else if (optopt == 'l') {
-          fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+          char message[50];
+          sprintf(message, "Option -%c requires an argument. Using default.", optopt);
+          buildAndAddErrorMessage(message, programName, nValue);
+          filename = "logfile.txt";
         }
         else if (isprint (optopt)) {
-          fprintf (stderr, "Unknown option -%c.\n", optopt);
+          char message[50];
+          sprintf(message, "Unknown option -%c. Terminating.", optopt);
+          buildAndAddErrorMessage(message, programName, nValue);
+          saveLog(filename);
+          clearLog();
+          return 1;
         }
         else {
-          fprintf (stderr, "Unknown option character `\\x%x'.\n", optopt);
+          char message[50];
+          sprintf(message, "Unknown option character `\\x%x'. Terminating.", optopt);
+          buildAndAddErrorMessage(message, programName, nValue);
+          saveLog(filename);
+          clearLog();
+          return 1; 
         }
-        return 1;
       default:
-        abort ();
+        buildAndAddErrorMessage("Unhandled exception. Aborting.", programName, nValue);
+        saveLog(filename);
+        clearLog();
+        abort();
       }
 
   for (index = optind; index < argc; index++) {
-    char nonOptArg[21 + sizeof(argv[index])];
-    sprintf(nonOptArg, "Non-option argument %s", argv[index]);
-    puts(nonOptArg);
-    buildAndAddErrorMessage(nonOptArg, programName, nValue);
-    printf ("Non-option argument %s\n", argv[index]);
+    char message[21 + sizeof(argv[index])];
+    sprintf(message, "Non-option argument %s", argv[index]);
+    buildAndAddErrorMessage(message, programName, nValue);
   }
 
   if(hflag) {
     printHelpMessage();
   }
 
-  data_t newData;
-  newData.string = "Unknown option -a\n";
-  char * statusMessage = addMsg(newData);
+  buildAndAddErrorMessage("Whaaaat? No aliens??", programName, nValue); 
+  buildAndAddErrorMessage("Their leader has come!!", programName, nValue); 
+  buildAndAddErrorMessage("Running low on health....", programName, nValue); 
   saveLog(filename);
   clearLog();
   return 0;

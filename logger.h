@@ -1,9 +1,9 @@
 #ifndef LOGGER_h
 #define LOGGER_H
-#include <time.h>
+#include <sys/time.h>
 
 typedef struct data_struct {
-  time_t time;
+  struct timespec time;
   char *string;
 } data_t;
 
