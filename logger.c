@@ -78,8 +78,8 @@ char *getLog(void) {
 
   logString = malloc(nodeSize);
   if(!logString) {
-    perror("Error malloc-ing for error string ");
-    return "Unable to allocate memory for string\n";
+    perror("Error malloc-ing for logString ");
+    return "Unable to allocate memory for logString\n";
   }
   strcat(logString, "*****Begin Log*****\n");
   nodeptr = headptr;
@@ -132,5 +132,6 @@ void buildAndAddErrorMessage(char *errorMessage, char *programName, int nValue) 
   strcat(newEntry.string, timeInMillis);
   strcat(newEntry.string, ": Error: ");
   strcat(newEntry.string, errorMessage);
-  addMsg(newEntry);
+  printf(addMsg(newEntry));
+  free(newEntry.string);
 }
