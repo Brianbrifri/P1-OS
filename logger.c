@@ -17,7 +17,6 @@ char * addMsg(data_t data) {
   int entrySize;
 
   entrySize = sizeof(log_t) + strlen(data.string) + 1;
-  //Couldn't add newEntry
   if((newEntry = (log_t *) (malloc(entrySize))) == NULL) {
     perror("Error: malloc newEntry ");
     return "Could not malloc for log\n";
@@ -57,7 +56,6 @@ void clearLog(void) {
 
   headptr = NULL;
   tailptr = NULL;
-
 }
 
 char *getLog(void) {

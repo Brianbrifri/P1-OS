@@ -11,7 +11,7 @@ char * addMsg(data_t data);
 void clearLog(void);
 char *getLog(void);
 char *saveLog(char *filename);
-void buildAndSaveErrorMessage(data_t data);
+void buildErrorMessage(data_t data, char *programName);
 void printHelpMessage(void);
 
 #endif

@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
+#include <time.h>
 
 #include "logger.h"
 
@@ -53,18 +54,29 @@ int main (int argc, char **argv)
         abort ();
       }
 
-  for (index = optind; index < argc; index++)
+  for (index = optind; index < argc; index++) {
+    char *nonOptArg = NULL;
+    size_t nonOptArgSize = 21 + sizeof(argv[index]);
+    nonOptArg = malloc(nonOptArgSize);
+    strcat(nonOptArg, "Non-option argument ");
+    strcat(nonOptArg, argv[index]);
+    strcat(nonOptArg, "\n");
+    data_t data;
+    data.string = nonOptArg;
+    addMsg(data);
     printf ("Non-option argument %s\n", argv[index]);
+    free(nonOptArg);
+  }
 
   if(hflag) {
     printHelpMessage();
   }
 
-  data_t fakeData;
-  fakeData.string = "Why do I have to add this string you ask?\nWho knows!!";
-  addMsg(fakeData);
-  saveLog(filename);
-  clearLog();
+  //data_t fakeData;
+  //fakeData.string = "Why do I have to add this string you ask?\nWho knows!!";
+  //addMsg(fakeData);
+  //saveLog(filename);
+  //clearLog();
   data_t newData;
   newData.string = "Unknown option -a\n";
   char * statusMessage = addMsg(newData);
