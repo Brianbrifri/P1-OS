@@ -87,7 +87,10 @@ int main (int argc, char **argv)
   buildAndAddErrorMessage("Whaaaat? No aliens??", programName, nValue); 
   buildAndAddErrorMessage("Their leader has come!!", programName, nValue); 
   buildAndAddErrorMessage("Running low on health....", programName, nValue); 
-  saveLog(filename);
+  if(!saveLog(filename)) {
+    buildAndAddErrorMessage("Unable to save to specified file. Saving to default file.", programName, nValue);
+    saveLog("logfile.txt");
+  }
   clearLog();
   return 0;
 }

@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-#include <time.h>
 
 #include "logger.h"
 
@@ -79,7 +78,7 @@ char *getLog(void) {
 
   logString = malloc(nodeSize);
   if(!logString) {
-    perror("Error: logString malloc ");
+    perror("Error malloc-ing for error string ");
     return "Unable to allocate memory for string\n";
   }
   strcat(logString, "*****Begin Log*****\n");
@@ -92,22 +91,22 @@ char *getLog(void) {
   return logString;
 }
 
-char *saveLog(char *filename) {
+int saveLog(char *filename) {
   char *logString;
   logString = getLog();
   FILE *file = fopen(filename, "a");
   if(!file) {
-    perror("Error: open file ");
-    return("Could not open file\n");
+    perror("Error opening file ");
+    return 0;
   }
   else {
     fprintf(file, logString);
   }
   if(fclose(file)) {
-    perror("Error: closing file ");
+    perror("Error closing file ");
   } 
   free(logString);
-  return "Successfully saved log\n";
+  return 1;
 }
 
 void printHelpMessage(void) {

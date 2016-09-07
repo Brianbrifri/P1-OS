@@ -1,6 +1,6 @@
 #ifndef LOGGER_h
 #define LOGGER_H
-#include <sys/time.h>
+#include <time.h>
 
 typedef struct data_struct {
   struct timespec time;
@@ -10,7 +10,7 @@ typedef struct data_struct {
 char *addMsg(data_t data);
 void clearLog(void);
 char *getLog(void);
-char *saveLog(char *filename);
+int saveLog(char *filename);
 void buildAndAddErrorMessage(char *errorMessage, char *programName, int nValue);
 void printHelpMessage(void);
 
