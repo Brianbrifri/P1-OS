@@ -1,7 +1,7 @@
 objects = debugger.o logger.o
 
 debugger: $(objects)
-	gcc -o debugger $(objects)
+	gcc -g -o debugger $(objects)
 debugger.o: debugger.c logger.h
 	gcc -g -c debugger.c
 logger.o: logger.c logger.h

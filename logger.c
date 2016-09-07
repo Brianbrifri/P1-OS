@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 #include "logger.h"
 
@@ -83,7 +84,6 @@ char *getLog(void) {
   strcat(logString, "*****Begin Log*****\n");
   nodeptr = headptr;
   while(nodeptr) {
-    //strcat(logString, asctime(localtime(nodeptr->item.time)));
     strcat(logString, nodeptr->item.string);
     strcat(logString, "\n");
     nodeptr = nodeptr->next;
@@ -91,7 +91,7 @@ char *getLog(void) {
   return logString;
 }
 
-char * saveLog(char *filename) {
+char *saveLog(char *filename) {
   char *logString;
   logString = getLog();
   FILE *file = fopen(filename, "a");
@@ -101,8 +101,10 @@ char * saveLog(char *filename) {
   }
   else {
     fprintf(file, logString);
-    fclose(file); 
   }
+  if(fclose(file)) {
+    perror("Error: closing file ");
+  } 
   free(logString);
   return "Successfully saved log\n";
 }
@@ -115,4 +117,19 @@ void printHelpMessage(void) {
     printf("-n: Allows you to set the number of messages to the alien planet Krudo.\n");
     printf("\tThe default value is 42.\n");
     printf("-l: Allows you to set the filename for the logger so the aliens can see how bad you mess up.\n");
+}
+
+void buildAndAddErrorMessage(char *errorMessage, char *programName, int nValue) {
+  data_t newEntry;
+  newEntry.time = time(NULL);
+  char timeInMillis[sizeof((uintmax_t)newEntry.time)];
+  sprintf(timeInMillis, "%ju", ((uintmax_t)newEntry.time));
+  puts(timeInMillis);
+  newEntry.string = malloc(sizeof(timeInMillis) + sizeof(errorMessage) + sizeof(programName) + 50);
+  strcat(newEntry.string, programName);
+  strcat(newEntry.string, ": ");
+  strcat(newEntry.string, timeInMillis);
+  strcat(newEntry.string, ": Error: ");
+  strcat(newEntry.string, errorMessage);
+  addMsg(newEntry);
 }
