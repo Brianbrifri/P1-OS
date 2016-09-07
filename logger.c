@@ -127,16 +127,24 @@ void printShortHelpMessage(void) {
 
 void buildAndAddErrorMessage(char *errorMessage, char *programName, int nValue) {
   data_t newEntry;
+
   clock_gettime(CLOCK_REALTIME, &newEntry.time);
   long unsigned timeInMillisNum = newEntry.time.tv_nsec;
   long unsigned timeInSecsNum = newEntry.time.tv_sec;
+
   char timeInMillis[sizeof(timeInMillisNum) + sizeof(timeInSecsNum)];
+  char nValueMessage[sizeof(nValue) + 15];
+
   sprintf(timeInMillis, "%lu%lu", timeInSecsNum, timeInMillisNum);
-  newEntry.string = malloc(sizeof(timeInMillis) + sizeof(errorMessage) + sizeof(programName) + 50);
+  sprintf(nValueMessage, "nValue = %d - ", nValue);
+
+  newEntry.string = malloc(sizeof(timeInMillis) + sizeof(errorMessage) + sizeof(nValueMessage) + sizeof(programName) + 50);
+
   strcat(newEntry.string, programName);
   strcat(newEntry.string, ": ");
   strcat(newEntry.string, timeInMillis);
   strcat(newEntry.string, ": Error: ");
+  strcat(newEntry.string, nValueMessage);
   strcat(newEntry.string, errorMessage);
   printf("%s", addMsg(newEntry));
   free(newEntry.string);

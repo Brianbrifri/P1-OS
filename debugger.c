@@ -24,6 +24,14 @@ int main (int argc, char **argv)
     {0,     0,            0,  0},
   };
 
+  buildAndAddErrorMessage("Test Log", programName, nValue);
+  if(!saveLog(filename)) {
+      printf("Unable to save to specified file. Saving to default file.");
+      buildAndAddErrorMessage("Unable to save to specified file. Saving to default file.", programName, nValue);
+      saveLog("logfile.txt");
+    }
+  clearLog();
+
   opterr = 0;
   while ((c = getopt_long (argc, argv, short_options, long_options, NULL)) != -1)
     switch (c)
