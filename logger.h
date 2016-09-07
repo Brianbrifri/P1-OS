@@ -13,5 +13,6 @@ char *getLog(void);
 int saveLog(char *filename);
 void buildAndAddErrorMessage(char *errorMessage, char *programName, int nValue);
 void printHelpMessage(void);
+void printShortHelpMessage(void);
 
 #endif

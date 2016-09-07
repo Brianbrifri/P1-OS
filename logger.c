@@ -64,7 +64,7 @@ char *getLog(void) {
   size_t nodeSize;
   char *logString;
 
-  nodeSize = 20;
+  nodeSize = 21;
   nodeptr = headptr;
 
   if(!nodeptr) {
@@ -81,13 +81,14 @@ char *getLog(void) {
     perror("Error malloc-ing for logString ");
     return "Unable to allocate memory for logString\n";
   }
-  strcat(logString, "*****Begin Log*****\n");
+  strcat(logString, "*****Begin Log*****\n\n");
   nodeptr = headptr;
   while(nodeptr) {
     strcat(logString, nodeptr->item.string);
     strcat(logString, "\n");
     nodeptr = nodeptr->next;
   }
+  strcat(logString, "\n");
   return logString;
 }
 
@@ -113,10 +114,15 @@ void printHelpMessage(void) {
     printf("\nThank you for using the help menu!\n");
     printf("The following is a helpful guide to enable you to use this\n");
     printf("debugger program to the best of your ability!\n\n");
-    printf("-h, -help: Prints this help message.\n");
+    printf("-h, --help: Prints this help message.\n");
     printf("-n: Allows you to set the number of messages to the alien planet Krudo.\n");
     printf("\tThe default value is 42.\n");
     printf("-l: Allows you to set the filename for the logger so the aliens can see how bad you mess up.\n");
+}
+
+void printShortHelpMessage(void) {
+  printf("\nAcceptable options are:\n");
+  printf("[-h], [--help], [-l][required_arg], [-n][required_arg]\n\n");
 }
 
 void buildAndAddErrorMessage(char *errorMessage, char *programName, int nValue) {

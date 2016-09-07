@@ -52,6 +52,7 @@ int main (int argc, char **argv)
           filename = "logfile.txt";
         }
         else if (isprint (optopt)) {
+          printShortHelpMessage();
           char message[50];
           sprintf(message, "Unknown option -%c. Terminating.", optopt);
           buildAndAddErrorMessage(message, programName, nValue);
@@ -60,6 +61,7 @@ int main (int argc, char **argv)
           return 1;
         }
         else {
+          printShortHelpMessage();
           char message[50];
           sprintf(message, "Unknown option character `\\x%x'. Terminating.", optopt);
           buildAndAddErrorMessage(message, programName, nValue);
@@ -68,6 +70,7 @@ int main (int argc, char **argv)
           return 1; 
         }
       default:
+        printShortHelpMessage();
         buildAndAddErrorMessage("Unhandled exception. Aborting.", programName, nValue);
         saveLog(filename);
         clearLog();
