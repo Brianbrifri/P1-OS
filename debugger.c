@@ -14,6 +14,7 @@ int main (int argc, char **argv)
   int index;
   int nValue = 42;
   char *filename = "logfile.txt";
+  char *defaultFileName = "logfile.txt";
   char *programName = argv[0];
   char *option = NULL;
   char *short_options = "hn:l:";
@@ -25,13 +26,7 @@ int main (int argc, char **argv)
   };
 
   buildAndAddErrorMessage("Test Log", programName, nValue);
-  if(!saveLog(filename)) {
-      printf("Unable to save to specified file. Saving to default file.");
-      buildAndAddErrorMessage("Unable to save to specified file. Saving to default file.", programName, nValue);
-      saveLog("logfile.txt");
-    }
-  clearLog();
-
+  
   opterr = 0;
   while ((c = getopt_long (argc, argv, short_options, long_options, NULL)) != -1)
     switch (c)
@@ -84,6 +79,11 @@ int main (int argc, char **argv)
         clearLog();
         abort();
       }
+  if(!saveLog(filename)) {
+      printf("Unable to save to specified file. Saving to default file.\n");
+      saveLog(defaultFileName);
+    }
+  clearLog();
 
   for (index = optind; index < argc; index++) {
     char message[21 + sizeof(argv[index])];
@@ -101,9 +101,8 @@ int main (int argc, char **argv)
     buildAndAddErrorMessage("Running low on health....", programName, nValue); 
     }
   if(!saveLog(filename)) {
-      printf("Unable to save to specified file. Saving to default file.");
-      buildAndAddErrorMessage("Unable to save to specified file. Saving to default file.", programName, nValue);
-      saveLog("logfile.txt");
+      printf("Unable to save to specified file. Saving to default file.\n");
+      saveLog(defaultFileName);
     }
   clearLog();
 

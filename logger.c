@@ -94,19 +94,19 @@ char *getLog(void) {
 
 int saveLog(char *filename) {
   char *logString;
-  logString = getLog();
   FILE *file = fopen(filename, "a");
   if(!file) {
     perror("Error opening file ");
     return 0;
   }
   else {
+    char *logString = getLog();
     fprintf(file, "%s", logString);
+    free(logString);
+    if(fclose(file)) {
+      perror("Error closing file ");
+    } 
   }
-  if(fclose(file)) {
-    perror("Error closing file ");
-  } 
-  free(logString);
   return 1;
 }
 
