@@ -100,7 +100,7 @@ int saveLog(char *filename) {
     return 0;
   }
   else {
-    fprintf(file, logString);
+    fprintf(file, "%s", logString);
   }
   if(fclose(file)) {
     perror("Error closing file ");
@@ -124,7 +124,7 @@ void buildAndAddErrorMessage(char *errorMessage, char *programName, int nValue) 
   clock_gettime(CLOCK_REALTIME, &newEntry.time);
   long unsigned timeInMillisNum = newEntry.time.tv_nsec;
   long unsigned timeInSecsNum = newEntry.time.tv_sec;
-  char timeInMillis[sizeof(timeInMillisNum)];
+  char timeInMillis[sizeof(timeInMillisNum) + sizeof(timeInSecsNum)];
   sprintf(timeInMillis, "%lu%lu", timeInSecsNum, timeInMillisNum);
   newEntry.string = malloc(sizeof(timeInMillis) + sizeof(errorMessage) + sizeof(programName) + 50);
   strcat(newEntry.string, programName);
@@ -132,6 +132,6 @@ void buildAndAddErrorMessage(char *errorMessage, char *programName, int nValue) 
   strcat(newEntry.string, timeInMillis);
   strcat(newEntry.string, ": Error: ");
   strcat(newEntry.string, errorMessage);
-  printf(addMsg(newEntry));
+  printf("%s", addMsg(newEntry));
   free(newEntry.string);
 }
