@@ -99,11 +99,11 @@ int main (int argc, char **argv)
     buildAndAddErrorMessage("Whaaaat? No aliens??", programName, nValue); 
     buildAndAddErrorMessage("Their leader has come!!", programName, nValue); 
     buildAndAddErrorMessage("Running low on health....", programName, nValue); 
-    }
+  }
   if(!saveLog(filename)) {
       printf("Unable to save to specified file. Saving to default file.\n");
       saveLog(defaultFileName);
-    }
+  }
   clearLog();
 
   return 0;

@@ -40,15 +40,15 @@ char * addMsg(data_t data) {
 }
 
 void clearLog(void) {
+  if(!headptr) {
+    return;
+  }
   log_t *nodeptr;
   log_t *next;
 
   nodeptr = headptr;
   next = headptr->next;
 
-  if(!nodeptr) {
-    return;
-  }
   while(nodeptr) {
     next = nodeptr->next;
     free(nodeptr);
@@ -61,15 +61,14 @@ void clearLog(void) {
 
 char *getLog(void) {
   log_t *nodeptr;
-  size_t nodeSize;
+  size_t nodeSize = 30;
   char *logString;
 
-  nodeSize = 21;
-  nodeptr = headptr;
-
-  if(!nodeptr) {
-    return "No errors t'day, mate!\n";
+  if(!headptr) {
+    return "No errors t'day mate!\n\n";
   }
+
+  nodeptr = headptr;
 
   while(nodeptr) {
     nodeSize += (sizeof(log_t) + strlen(nodeptr->item.string) + 4);
@@ -81,28 +80,29 @@ char *getLog(void) {
     perror("Error malloc-ing for logString ");
     return "Unable to allocate memory for logString\n";
   }
+
   strcat(logString, "*****Begin Log*****\n\n");
   nodeptr = headptr;
+
   while(nodeptr) {
     strcat(logString, nodeptr->item.string);
     strcat(logString, "\n");
     nodeptr = nodeptr->next;
   }
   strcat(logString, "\n");
+
   return logString;
 }
 
 int saveLog(char *filename) {
-  char *logString;
   FILE *file = fopen(filename, "a");
+
   if(!file) {
     perror("Error opening file ");
     return 0;
   }
   else {
-    char *logString = getLog();
-    fprintf(file, "%s", logString);
-    free(logString);
+    fprintf(file, "%s", getLog());
     if(fclose(file)) {
       perror("Error closing file ");
     } 
