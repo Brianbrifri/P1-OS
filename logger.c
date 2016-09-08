@@ -79,12 +79,12 @@ char *getLog(void) {
   }
 
   logString = malloc(nodeSize);
-  logString[0] = 0;
   if(!logString) {
     perror("Error malloc-ing for logString ");
     return noError;
   }
 
+  logString[0] = 0;
   strcat(logString, "*****Begin Log*****\n\n");
   nodeptr = headptr;
 
@@ -95,6 +95,7 @@ char *getLog(void) {
   }
   strcat(logString, "\n");
 
+  free(noError);
   return logString;
 }
 
@@ -127,6 +128,7 @@ void printHelpMessage(void) {
     printf("-n: Allows you to set the number of messages to the alien planet Krudo.\n");
     printf("\tThe default value is 42.\n");
     printf("-l: Allows you to set the filename for the logger so the aliens can see how bad you mess up.\n");
+    printf("\tThe default value is logfile.txt.\n");
 }
 
 void printShortHelpMessage(void) {
@@ -141,8 +143,8 @@ void buildAndAddErrorMessage(char *errorMessage, char *programName, int nValue) 
   long unsigned timeInMillisNum = newEntry.time.tv_nsec;
   long unsigned timeInSecsNum = newEntry.time.tv_sec;
 
-  char timeInMillis[sizeof(timeInMillisNum) + sizeof(timeInSecsNum)];
-  char nValueMessage[sizeof(nValue) + 15];
+  char timeInMillis[30];
+  char nValueMessage[30];
 
   sprintf(timeInMillis, "%lu%lu", timeInSecsNum, timeInMillisNum);
   sprintf(nValueMessage, "nValue = %d - ", nValue);
