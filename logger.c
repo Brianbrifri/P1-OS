@@ -47,7 +47,7 @@ void clearLog(void) {
   log_t *next;
 
   nodeptr = headptr;
-  next = headptr->next;
+  next = nodeptr->next;
 
   while(nodeptr) {
     next = nodeptr->next;
@@ -63,9 +63,12 @@ char *getLog(void) {
   log_t *nodeptr;
   size_t nodeSize = 30;
   char *logString;
+  char *noError = malloc(nodeSize);
+
+  strcat(noError, "No logs t'day mate!\n\n");
 
   if(!headptr) {
-    return "No errors t'day mate!\n\n";
+    return noError;
   }
 
   nodeptr = headptr;
@@ -76,9 +79,10 @@ char *getLog(void) {
   }
 
   logString = malloc(nodeSize);
+  logString[0] = 0;
   if(!logString) {
     perror("Error malloc-ing for logString ");
-    return "Unable to allocate memory for logString\n";
+    return noError;
   }
 
   strcat(logString, "*****Begin Log*****\n\n");
@@ -95,6 +99,7 @@ char *getLog(void) {
 }
 
 int saveLog(char *filename) {
+  char *logString; 
   FILE *file = fopen(filename, "a");
 
   if(!file) {
@@ -102,11 +107,15 @@ int saveLog(char *filename) {
     return 0;
   }
   else {
-    fprintf(file, "%s", getLog());
+
+    logString = getLog();
+    fprintf(file, "%s", logString);
+
     if(fclose(file)) {
       perror("Error closing file ");
     } 
   }
+  free(logString);
   return 1;
 }
 
@@ -137,15 +146,17 @@ void buildAndAddErrorMessage(char *errorMessage, char *programName, int nValue) 
 
   sprintf(timeInMillis, "%lu%lu", timeInSecsNum, timeInMillisNum);
   sprintf(nValueMessage, "nValue = %d - ", nValue);
+  int size = strlen(timeInMillis) + strlen(errorMessage) + strlen(nValueMessage) + strlen(programName) + 50;
 
-  newEntry.string = malloc(sizeof(timeInMillis) + sizeof(errorMessage) + sizeof(nValueMessage) + sizeof(programName) + 50);
+  char fullError[size];
+  fullError[0] = 0;
 
-  strcat(newEntry.string, programName);
-  strcat(newEntry.string, ": ");
-  strcat(newEntry.string, timeInMillis);
-  strcat(newEntry.string, ": Error: ");
-  strcat(newEntry.string, nValueMessage);
-  strcat(newEntry.string, errorMessage);
+  strcat(fullError, programName);
+  strcat(fullError, ": ");
+  strcat(fullError, timeInMillis);
+  strcat(fullError, ": Error: ");
+  strcat(fullError, nValueMessage);
+  strcat(fullError, errorMessage);
+  newEntry.string = fullError;
   printf("%s", addMsg(newEntry));
-  free(newEntry.string);
 }
