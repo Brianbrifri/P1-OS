@@ -65,6 +65,8 @@ char *getLog(void) {
   char *logString;
   char *noError = malloc(nodeSize);
 
+  noError[0] = 0;
+
   strcat(noError, "No logs t'day mate!\n\n");
 
   if(!headptr) {
